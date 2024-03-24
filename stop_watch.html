@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #stopwatch {
+            font-size: 2em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+          }
+          
+          #display {
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
+          
+          #stopwatch button {
+            margin: 5px;
+            padding: 10px;
+            cursor: pointer;
+          }
+    </style>
+    <script>
+        // Get references to the elements on the page
+const display = document.getElementById("display");
+const startButton = document.getElementById("startButton");
+const pauseButton = document.getElementById("pauseButton");
+const resetButton = document.getElementById("resetButton");
+const lapButton = document.getElementById("lapButton");
+const laps = document.getElementById("laps");
+
+let elapsedTime = 0;
+let timerInterval;
+
+// Function to start the stopwatch
+function start() {
+  // Set the elapsed time to the current time minus the time at the start of the stopwatch
+  elapsedTime = Date.now() - startTime;
+  // Start the timer interval
+  timerInterval = setInterval(function printTime() {
+    elapsedTime = Date.now() - startTime;
+    display.textContent = timeToString(elapsedTime);
+  }, 10);
+  // Hide the start button and show the pause button
+  startButton.style.display = "none";
+  pauseButton.style.display = "block";
+}
+
+// Function to pause the stopwatch
+function pause() {
+  clearInterval(timerInterval);
+  showButton("START");
+}
+
+// Function to reset the stopwatch
+function reset() {
+  clearInterval(timerInterval);
+  elapsedTime = 0;
+  display.textContent = "00:00:00";
+  showButton("START");
+}
+
+// Function to track a lap
+function lap() {
+  const listItem = document.createElement("li");
+  listItem.textContent = display.textContent;
+  laps.appendChild(listItem);
+}
+
+// Function to display a button
+function showButton(buttonKey) {
+  const buttons = [startButton, pauseButton, resetButton];
+  buttons.forEach(button => {
+    if (button.id === buttonKey) {
+      button.style.display = "block";
+    } else {
+      button.style.display = "none";
+    }
+  });
+}
+
+// Utility function to format elapsed time as hh:mm:ss
+function timeToString(time) {
+  let diffInHrs = time / 3600000;
+  let hh = Math.floor(diffInHrs);
+  let diffInMin = (diffInHrs - hh) * 60;
+  let mm = Math.floor(diffInMin);
+  let diffInSec = (diffInMin - mm) * 60;
+  let ss = Math.floor(diffInSec);
+    </script>
+</head>
+<body>
+    <div id="stopwatch">
+        <span id="display">00:00:00</span>
+        <button id="startButton">Start</button>
+        <button id="pauseButton">Pause</button>
+        <button id="resetButton">Reset</button>
+        <button id="lapButton">Lap</button>
+        <ul id="laps"></ul>
+      </div>
+</body>
+</html>
